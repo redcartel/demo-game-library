@@ -1,20 +1,23 @@
 # React App and connecting Firebase
 
-## Create React App
+## Repo / Project Structure
 
-If you want a big repo with multiple parts to it (like a React frontend and some server functions) then make a git repo for the project run `npx create-react-app@latest react-frontend`
+There are two ways of doing this, either have a repo that consists of a parent directory for the whole multi-part project, with sub-directories for things like the web frontend, the server, shared resources, etc. or else separate repos for each part. They both have advantages. Lately, I'm a "monorepo" kind of guy.
+### Monorepo
 
-If you want just a react app, then in whatever directory your personal projects live in run `npx create-react-app@latest my-project-name` and then do `git init` in the directory that creates.
+If you want a big repo with multiple parts to it, like this sample project is, make your `my-project` directory wherever you usually do that, run `git init` in it, and run `npx create-react-app@latest react-frontend` from within that base directory.
 
-Create-react-app takes a while, it always downloads the latest CRA first. Now's a good time to make coffee.
+### Multi-Repos
+
+If you want a repo that is just a react app, then in whatever directory your personal projects live in run `npx create-react-app@latest my-project-name` and then do `git init` in the directory that creates.
 
 ## Open in Visual Studio Code
 
-Now that we have some code to edit, let's open our editor
+Now that we have some code to edit, let's open the project directory in our editor
 
 `code my-project-name`
 
-### Keyboard shortcuts
+### Some (Mac) Keyboard shortcuts for VS Code
 
 Microsoft is all about some JavaScript & TypeScript these days, so for a node project, you really might not need any plugins, the default support is good. Here's the three keyboard shortcuts you need to know (on Mac):
 
@@ -24,7 +27,7 @@ Microsoft is all about some JavaScript & TypeScript these days, so for a node pr
 
 Highlight text + `command+forward slash` comment or uncomment a block of code.
 
-That's it. That's all I use. I'm not a power user. Go nuts if you want to, there's lots of productivity plugins and keyboard shortcuts, but it's just not how I roll.
+That's it. That's almost all I use. I'm not a power user. Go nuts if you want to, there's lots of productivity plugins and keyboard shortcuts, but it's just not how I roll.
 
 ## Install dependencies
 
@@ -44,9 +47,15 @@ Axios is an HTTP request library provider that I'm told also runs an online news
 
 From the root directory of the react project run `npm install axios`
 
+#### well, actually
+
+I didn't use axios in the example project! The API I used wound up not having CORS support so I couldn't make requests directly from the webapp. What's cool about axios though is it is the same library with the same syntax for making requests from either a client browser or from a server (or from a react-native phone app for that matter) so if you want some example axios code, look in the functions directory of this project, it will work the same if you wind up doing requests directly in the client.
+
 #### firebase
 
 `npm install firebase`
+
+This will install (as of this writing) version 9 of the firebase client libraries. So, so, so much example code out there is for version 8, and it's COMPLETELY different. I prefer version 8, but we sometimes just have to move on. That's how life is.
 
 #### Material UI
 
@@ -58,24 +67,26 @@ And you might as well install the icon pack that goes with it. They're neat. htt
 
 `npm install @mui/icons-material`
 
-## Firebase config file
+## Firebase config file and .env
 
 Look at `src/firebase/fire.js`
 
-I basically just modified the file from the firebase gear icon page web app section to have some useful exports.
+Don't just copy the firebase config file from the firebase webapp screen into your project and check that into git.
 
-All of those keys and tokens are PUBLIC, as is every other scrap of anything that goes into a React app. That's cool. That's ok. If you need backend access to the firebase API on a server, there are a few more ID values you have to have. But that does mean that a nefarious user who knows their JavaScript can do anything your own web code would be capable of doing. Like registering new users, or making writes to firestore that your access rules permit.
+Don't do it.
 
-Think about that when deciding what goes into the frontend code and what goes into cloud functions or onto a server. The Firebase philosophy is that you can get away with more responsibility being placed on the client than is traditional, but there are limits to what is sane.
+Everything in that file is public. Everything included in ANY React project is public. But still, I think it's a bad idea to check deployment specific credential values into a git repo.
+
+Look at the `src/firebase/fire.js` file I have in this project. It pulls the values from a `.env` file that is ignored in `.gitignore`. IMO, this is how to do it. `.sample.env` shows how `.env` should look, you just copy those values from Firebase into there.
 
 ## A word about custom hooks
 
-`src/utils/hooks` has my hooks. (Jon Hamm in 30 Rock joke goes here)
+`src/utils/hooks` has my hooks. (Jon Hamm in 30 Rock jpg goes here)
 
 I think custom hooks are a subject new React developers avoid. None of the juniors at my job write them. This is silly, they're amazing and they really clean up the code.
 
-If you need to do complicated or even semi-complicated stuff involving multiple hooks, it's best to abstract that logic out of your components into a hook.
+If you need to do complicated or even semi-complicated stuff involving multiple hooks, it's best to abstract that logic out of your components into a custom hook.
 
-You can return state variables and callbacks from the custom hook that you can then use in your component. If you want a custom hook to create a function that a component can use, it absolutely must be wrapped in useCallback. And mind the state dependencies for that callBack (the stuff in []). That function won't see changes to any variables not in those brackets, and that can result in weird bugs.
+You can return state variables and callbacks from the custom hook that you can then use in your component. If you want a custom hook to return a function that a component can use, it absolutely must be wrapped in useCallback. And mind the state dependencies for that callBack (the stuff in []). That function won't see updates to any variables not in those brackets, and that can result in weird bugs.
 
-It's basically impossible to fully achieve this, but the goal is for components to be mostly about visual presentation and have as little logic logic in them as possible. Anything that gets data processing out of the components and into another file is good.
+The goal is for components to be mostly about visual presentation and have as little logic-logic in them as possible. Anything that gets data processing out of the components and into another file is good.
