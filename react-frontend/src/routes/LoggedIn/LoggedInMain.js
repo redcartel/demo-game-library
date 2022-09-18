@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Backdrop } from "@mui/material";
 import { useState } from "react";
 import useSearchGames from "../../utils/hooks/useSearchGames";
 import useLookupGame from "../../utils/hooks/useLookupGame";
@@ -13,6 +13,7 @@ export default function LoggedInMain({ user, userData }) {
     const [games, setGames] = useState([]);
     const searchGames = useSearchGames();
     const [foundGame, setFoundGame] = useState(null);
+    const [finding, setFinding] = useState(false);
     const lookupGame = useLookupGame();
     const addGame = useAddGame();
     const [adding, setAdding] = useState(false);
@@ -39,7 +40,14 @@ export default function LoggedInMain({ user, userData }) {
     }
 
     const findIndividualGame = (game_id) => {
-        lookupGame(game_id).then(gameData => setFoundGame(gameData));
+        setFinding(true);
+        lookupGame(game_id).then(gameData => {
+            setFinding(false);
+            setFoundGame(gameData)
+        }).catch(e => {
+            setFinding(false);
+            throw (e)
+        });
     }
 
     if (isRedirect) {
@@ -48,6 +56,12 @@ export default function LoggedInMain({ user, userData }) {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={finding}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <AddGameDialog foundGame={foundGame} setFoundGame={setFoundGame} addFn={add} adding={adding} />
             <MainSearchForm searchName={searchName} setSearchName={setSearchName} searchFn={search} />
             {games === null ?
