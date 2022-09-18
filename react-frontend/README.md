@@ -17,7 +17,7 @@ Now that we have some code to edit, let's open the project directory in our edit
 
 `code my-project-name`
 
-### Some (Mac) Keyboard shortcuts for VS Code
+#### Some (Mac) Keyboard shortcuts for VS Code
 
 Microsoft is all about some JavaScript & TypeScript these days, so for a node project, you really might not need any plugins, the default support is good. Here's the three keyboard shortcuts you need to know (on Mac):
 
@@ -78,6 +78,12 @@ Don't do it.
 Everything in that file is public. Everything included in ANY React project is public. But still, I think it's a bad idea to check deployment specific credential values into a git repo.
 
 Look at the `src/firebase/fire.js` file I have in this project. It pulls the values from a `.env` file that is ignored in `.gitignore`. IMO, this is how to do it. `.sample.env` shows how `.env` should look, you just copy those values from Firebase into there.
+
+## Title, favicon, robots.txt etc.
+
+All live in `/public` you can put images there too. I thiiiiiiink(?) firebase hosting is ok with a few images in public, but really binary files should be uploaded to firebase storage. Images are for CDNs.
+
+The generated html, css, and javascript that will actually be served to the internet is all created under `/build` when you set up deployment, it's the `/build` folder of the React app you will be deploying.
 
 ## A word about custom hooks
 
