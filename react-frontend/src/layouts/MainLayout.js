@@ -2,7 +2,6 @@ import { Container, Box, AppBar, Toolbar, IconButton, Typography, Button, Menu, 
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountIcon from "@mui/icons-material/AccountCircle";
-import "../styles/MainLayout.css"
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
 import { useState, useEffect } from "react";
 import { Link, useLocation, Navigate } from "react-router-dom";
@@ -87,7 +86,7 @@ export default function MainLayout({ children, user }) {
                                 open={Boolean(menuAnchor)}
                                 onClose={handleClose}
                             >
-                                <Link to={`/profile/${user.uid}`}>
+                                <Link to={`/profile/${user.uid}`} onClick={e => setMenuAnchor(null)}>
                                     <MenuItem>
                                         <ListItemIcon>
                                             <AccountIcon />
