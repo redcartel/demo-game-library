@@ -29,9 +29,9 @@ Their documentation is not clear enough on this point, IMO.
 Well first,
 ### I did not plan on using functions in this project
 
-I was like "Ok, John needs to build an API-based webapp, I'll do something fun with an API to demo"
+I was like "Ok, I'm demo-ing for someone who wants to build an API-based webapp, I'll do something fun with an API"
 
-The version of this project I used to use with students used either the Yahoo Finance API for slightly out of date stock data (up to date stock data is extraordinarily expensive) or a fun little Pokemon API. I saw that there was an "IGDB" video game API and thought I'd try something new.
+The version of this project I used to use with students used either the Yahoo Finance API for slightly out of date stock data (up to date stock data is extraordinarily expensive) or a fun little Pokemon API. I saw that there was an "IGDB" video game database API and thought I'd try something new.
 
 Well, it has crazy requirements, you've got to use private authentication keys to get an OAuth token and then it doesn't support CORS headers so a webapp can't call the API directly, you have to call it from the server and then pass that info down on to the app.
 

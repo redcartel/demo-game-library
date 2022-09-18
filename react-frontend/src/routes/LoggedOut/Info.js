@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material"
+import { Typography, Box, Link } from "@mui/material"
 
 export default function Info() {
     return (
@@ -6,8 +6,13 @@ export default function Info() {
             <Typography variant="h2" align="center">
                 About
             </Typography>
-            <Typography variant="body1">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed condimentum quam, vel faucibus eros. Mauris at hendrerit odio, eget dapibus est. Mauris eget tortor leo. Sed eleifend tristique lorem, non iaculis nulla tempor et. Praesent nec tempor dolor. Curabitur tincidunt libero et elit facilisis ultrices. Etiam imperdiet ex urna, id varius enim ultricies at. Etiam ex nunc, suscipit eget justo quis, egestas placerat mi. Donec in pulvinar magna, vitae laoreet ipsum. Ut vel faucibus arcu. Curabitur at lacus diam.
+            <Typography variant="body1" sx={{ marginTop: '20px' }}>
+                Carter Adams made this in September of 2022 to demo React &amp; Firebase. He hopes that someone finds it useful.
+            </Typography>
+            <Typography sx={{ marginTop: '20px' }}>
+                <Link href="https://github.com/redcartel/demo-game-library">
+                    https://github.com/redcartel/demo-game-library
+                </Link>
             </Typography>
         </Box>
     )
