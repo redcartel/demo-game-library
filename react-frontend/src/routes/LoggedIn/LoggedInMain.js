@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Backdrop } from "@mui/material";
+import { Box, CircularProgress, Backdrop, Typography } from "@mui/material";
 import { useState } from "react";
 import useSearchGames from "../../utils/hooks/useSearchGames";
 import useLookupGame from "../../utils/hooks/useLookupGame";
@@ -20,8 +20,8 @@ export default function LoggedInMain({ user, userData }) {
     const [isRedirect, setIsRedirect] = useState(false);
 
     const search = (event) => {
-        setGames(null);
         if (searchName.trim().length > 0) {
+            setGames(null);
             const _games = searchGames(searchName).then(games => setGames(games));
         }
     };
@@ -66,9 +66,11 @@ export default function LoggedInMain({ user, userData }) {
             <MainSearchForm searchName={searchName} setSearchName={setSearchName} searchFn={search} />
             {games === null ?
                 <CircularProgress sx={{ marginTop: '30vh' }} /> :
-                games.map(game => (
-                    <GameSearchCard game={game} key={game.id} findGameFn={findIndividualGame} />
-                ))}
+                games.length === 0 ?
+                    <Typography align="center">Search for games to add to your collection</Typography> :
+                    games.map(game => (
+                        <GameSearchCard game={game} key={game.id} findGameFn={findIndividualGame} />
+                    ))}
         </Box>
     )
 }

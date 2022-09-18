@@ -16,7 +16,7 @@ export default function useSearchGames() {
             token,
             client_id
         })
-        return result.data.filter(d => d.first_release_date).sort((a, b) => a.first_release_date - b.first_release_date);
+        return result?.data?.filter(d => d.first_release_date)?.sort((a, b) => a.first_release_date - b.first_release_date) ?? [];
     }, [getToken]);
 
     return searchGames;
