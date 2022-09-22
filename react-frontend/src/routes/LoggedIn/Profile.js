@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useRemoveGame from "../../utils/hooks/useRemoveGame";
 import ProfileGameCard from "../../components/ProfileGameCard";
 import useGetUser from "../../utils/hooks/useGetUser";
+import { CenteredFlex, ProfileGrid } from "../../components/styledComponents";
 
 export default function Profile({ user, userData }) {
     const { uid } = useParams();
@@ -16,29 +17,34 @@ export default function Profile({ user, userData }) {
     const [profileUser, setProfileUser] = useState(null);
 
     useEffect(() => {
-        setGames(null)
-        if (uid) {
-            getProfileGames(uid).then(_games => {
-                console.log(_games)
-                setGames(_games)
-            });
-            getUser(uid).then(_user => {
+        /* if you have to do something async within a useEffect, my preferred way is to
+        declare an async function and call it, rather than messing with .then() */
+        async function getGameAndUserInfo() {
+            setGames(null)
+            if (uid) {
+                // resolve two promises at once:
+                const simultaneousPromises = [getProfileGames(uid), getUser(uid)]
+                const [_games, _user] = await Promise.all(simultaneousPromises);
+
+                setGames(_games);
                 setProfileUser(_user);
-            })
+            }
         }
+        getGameAndUserInfo();
     }, [uid])
 
     const isSelf = user?.uid === uid;
 
     function remove(id) {
-        if (isSelf) {
-            setGames(null)
-            removeGame(id).then(() => {
-                getProfileGames(uid).then(_games => {
-                    setGames(_games)
-                });
-            })
+        async function removeGameAndRefresh(_id) {
+            if (isSelf) {
+                setGames(null)
+                await removeGame(_id);
+                const _games = await getProfileGames(uid);
+                setGames(_games)
+            }
         }
+        removeGameAndRefresh(id)
     }
 
 
@@ -46,25 +52,18 @@ export default function Profile({ user, userData }) {
     return (
         <Box>
             {games === null || profileUser === null ?
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    width: '100%'
-                }}>
+                <CenteredFlex>
                     <CircularProgress sx={{ marginTop: '30vh' }} />
-                </div> :
+                </CenteredFlex> :
                 <>
                     <Typography variant='h4' align='center' sx={{ margin: '40px 0px' }}>{profileUser.email}'s games</Typography>
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))'
-                    }}> {
+                    <ProfileGrid>
+                        {
                             games.map(game => (
                                 <ProfileGameCard game={game} key={game.id} isSelf={isSelf} removeFn={remove} />
                             ))
                         }
-                    </div>
+                    </ProfileGrid>
                 </>
             }
         </Box>

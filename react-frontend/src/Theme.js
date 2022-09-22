@@ -1,4 +1,4 @@
-import { createTheme, responsiveFontSizes, typographyClasses } from "@mui/material";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 
 // You can do all kinds of stuff with this, but I don't know much about it, TBH
 let theme = createTheme({
