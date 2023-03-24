@@ -1,4 +1,4 @@
-# demo-game-library : environment setup
+# demo-game-library : showing a friend some simple react
 
 This README and the ones in react-frontend and functions are about setting up firebase / react projects in general. You don't have to clone the code to follow them.
 
